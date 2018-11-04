@@ -29,6 +29,7 @@ public class ActividadPrueba extends AppCompatActivity {
 
 
     Button butEncontrar;
+    Button butVerEnMapa;
     TextView textViewResultado;
 
 
@@ -66,17 +67,53 @@ public class ActividadPrueba extends AppCompatActivity {
 
                 final Location lastKnown=locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
+                butVerEnMapa.setEnabled(true);
                 System.out.println("k");
 
                 textViewResultado.setText("Lat: "+lastKnown.getLatitude()+", Long:"+lastKnown.getLongitude());
+
+
+
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            public void onProviderEnabled(String provider) {
+            }
+
+            public void onProviderDisabled(String provider) {
+            }
+        };
+
+        textViewResultado=findViewById(R.id.tv_resultado);
+        butVerEnMapa=findViewById(R.id.but_verEnMapa);
+        butVerEnMapa.setEnabled(false);
+        butVerEnMapa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Geocoder geocoder = new Geocoder(ActividadPrueba.this, Locale.getDefault());
 
                 List<Address> addresses = null;
 
+                if (ActivityCompat.checkSelfPermission(ActividadPrueba.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ActividadPrueba.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+
+
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                final Location lastKnown=locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
                 try {
                     addresses = geocoder.getFromLocation(
-                            location.getLatitude(),
-                            location.getLongitude(),
+                            lastKnown.getLatitude(),
+                            lastKnown.getLongitude(),
                             1);
 
                     textViewResultado.setText(textViewResultado.getText()+"\n"+addresses.get(0).getAddressLine(0)+"\n Departamento: "+addresses.get(0).getAdminArea()+"\n Municipio: "+addresses.get(0).getSubAdminArea());
@@ -102,21 +139,8 @@ public class ActividadPrueba extends AppCompatActivity {
                     illegalArgumentException.printStackTrace();
 
                 }
-
-
             }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
-
-            public void onProviderEnabled(String provider) {
-            }
-
-            public void onProviderDisabled(String provider) {
-            }
-        };
-
-        textViewResultado=findViewById(R.id.tv_resultado);
+        });
         butEncontrar = findViewById(R.id.but_encontrarUbicacion);
         butEncontrar.setOnClickListener(new View.OnClickListener() {
             @Override

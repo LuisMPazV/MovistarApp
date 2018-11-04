@@ -8,6 +8,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -114,6 +116,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if(lista.get(i).getCoordenadaUsuario()!=null){
                 mMap.addMarker(new MarkerOptions()
                         .position(lista.get(i).getCoordenadaUsuario()));
+                if(lat==0){
+
+                    lat=lista.get(i).getCoordenadaUsuario().latitude;
+                    lng=lista.get(i).getCoordenadaUsuario().longitude;
+                }else{
+                    lat+=lista.get(i).getCoordenadaUsuario().latitude;
+                    lng+=lista.get(i).getCoordenadaUsuario().longitude;
+
+                }
             }else{
                 CircleOptions circleOptions = new CircleOptions()
                         .center(lista.get(i).getCoordenadaCaja())
@@ -121,8 +132,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 Circle circle = mMap.addCircle(circleOptions);
 
-                lat+=lista.get(i).getCoordenadaCaja().latitude;
-                lng+=lista.get(i).getCoordenadaCaja().longitude;
             }
 
         }
@@ -130,13 +139,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lng/=lista.size();
 
         if(point!=null){
+            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+
             mMap.moveCamera(CameraUpdateFactory.newLatLng(point));
             mMap.addMarker(new MarkerOptions()
-                    .position(point).title(desc));
+                    .position(point).icon(bitmapDescriptor).title(desc));
             mMap.setMinZoomPreference(6);
 
         }else{
             mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat,lng)));
+            mMap.setMinZoomPreference(6);
         }
 
 

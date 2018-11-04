@@ -88,6 +88,10 @@ public class MainActivity extends AppCompatActivity
 
             Intent i=new Intent(MainActivity.this,ActividadPrueba.class);
             startActivity(i);
+        } else if (id == R.id.nav_mac) {
+
+            Intent i=new Intent(MainActivity.this,Buscar_mac.class);
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

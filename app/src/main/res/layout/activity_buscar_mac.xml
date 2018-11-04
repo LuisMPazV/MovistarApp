@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="Escribe la direccion MAC"
+        android:id="@+id/et_mac"
+        android:text="00:0C:42:1F:65:E9"
+        android:textAlignment="center"
+        />
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:text="Buscar Coordenadas"
+        android:textSize="18dp"
+        android:textAllCaps="false"
+        android:id="@+id/btn_buscar"/>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resultado"
+        android:textSize="25dp"
+        android:id="@+id/txt_resultado"
+        android:textAlignment="center"/>
+
+</LinearLayout>
