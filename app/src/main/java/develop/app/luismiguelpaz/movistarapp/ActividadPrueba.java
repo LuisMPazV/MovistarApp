@@ -127,7 +127,7 @@ public class ActividadPrueba extends AppCompatActivity {
                             startActivity(mainIntent);
                             finish();
                         }
-                    },5000);
+                    },3000);
 
                     finish();
 

@@ -110,6 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         double lat=0;
         double lng=0;
+        int counter=0;
 
         for(int i=0; i<lista.size();i++){
 
@@ -120,10 +121,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     lat=lista.get(i).getCoordenadaUsuario().latitude;
                     lng=lista.get(i).getCoordenadaUsuario().longitude;
+                    counter++;
                 }else{
                     lat+=lista.get(i).getCoordenadaUsuario().latitude;
                     lng+=lista.get(i).getCoordenadaUsuario().longitude;
 
+                    counter++;
                 }
             }else{
                 CircleOptions circleOptions = new CircleOptions()
@@ -135,8 +138,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
         }
-        lat/=lista.size();
-        lng/=lista.size();
+        lat/=counter;
+        lng/=counter;
 
         if(point!=null){
             BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
@@ -144,11 +147,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLng(point));
             mMap.addMarker(new MarkerOptions()
                     .position(point).icon(bitmapDescriptor).title(desc));
-            mMap.setMinZoomPreference(6);
+            mMap.setMinZoomPreference(10);
 
         }else{
             mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat,lng)));
-            mMap.setMinZoomPreference(6);
+            mMap.setMinZoomPreference(10);
         }
 
 
