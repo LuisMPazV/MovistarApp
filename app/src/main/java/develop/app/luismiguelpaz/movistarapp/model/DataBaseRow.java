@@ -11,6 +11,7 @@ public class DataBaseRow {
     private String direccionCaja;
     private LatLng coordenadaCaja;
     private LatLng coordenadaUsuario;
+    private String predio;
 
 
     public DataBaseRow() {
@@ -24,6 +25,10 @@ public class DataBaseRow {
         this.direccionCaja = direccionCaja;
         this.coordenadaCaja = coordenadaCaja;
         this.coordenadaUsuario = coordenadaUsuario;
+        if (direccion!=null){
+            predio = IdentificadorPredios.getPredio(direccion);
+        }
+
     }
 
     public String getDireccion() {
@@ -80,5 +85,16 @@ public class DataBaseRow {
 
     public void setCoordenadaUsuario(LatLng coordenadaUsuario) {
         this.coordenadaUsuario = coordenadaUsuario;
+    }
+
+    public String getPredio() {
+        if (direccion!=null){
+            predio = IdentificadorPredios.getPredio(direccion);
+        }
+        return predio;
+    }
+
+    public void setPredio(String predio) {
+        this.predio = predio;
     }
 }

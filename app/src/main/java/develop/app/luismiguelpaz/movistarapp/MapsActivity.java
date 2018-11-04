@@ -1,5 +1,6 @@
 package develop.app.luismiguelpaz.movistarapp;
 
+import android.content.res.AssetManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -12,7 +13,12 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import develop.app.luismiguelpaz.movistarapp.model.DataBaseRow;
 
@@ -21,6 +27,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
 
     private ArrayList<DataBaseRow> lista;
+
+
+
+    private LatLng point;
+    private String desc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +39,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+        if(getIntent()!=null&&getIntent().getExtras()!=null&&!getIntent().getExtras().isEmpty()){
+            desc=getIntent().getExtras().getString("Text");
+            Double lat=getIntent().getExtras().getDouble("Lat");
+            Double lng=getIntent().getExtras().getDouble("Long");
+            point=new LatLng(lat,lng);
+        }
+
         mapFragment.getMapAsync(this);
         lista=new ArrayList<>();
         DataBaseRow nr=new DataBaseRow();
@@ -39,6 +58,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         DataBaseRow nr2=new DataBaseRow();
         nr2.setCoordenadaCaja(new LatLng( 4.45701, -75.24625));
         lista.add(nr2);
+
+
+        AssetManager am = this.getAssets();
+        try {
+            InputStream is = am.open("apartamentos-casa.txt");
+
+            BufferedReader in=new BufferedReader(new InputStreamReader(is));
+
+            String line=in.readLine();
+            int contador=0;
+            while(line!=null){
+
+                DataBaseRow dataBaseRow=new DataBaseRow();
+                StringTokenizer skt=new StringTokenizer(line,",");
+
+                if(contador<=4){
+
+                    dataBaseRow.setCoordenadaCaja(new LatLng(Double.parseDouble(skt.nextToken()),Double.parseDouble(skt.nextToken())));
+                }else{
+                    dataBaseRow.setCoordenadaUsuario(new LatLng(Double.parseDouble(skt.nextToken()),Double.parseDouble(skt.nextToken())));
+                }
+                lista.add(dataBaseRow);
+                line=in.readLine();
+                contador++;
+
+            }
+        }catch (Exception e){
+
+        }
 
     }
 
@@ -63,22 +111,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         for(int i=0; i<lista.size();i++){
 
-            CircleOptions circleOptions = new CircleOptions()
-                    .center(lista.get(i).getCoordenadaCaja())
-                    .radius(120); // In meters
+            if(lista.get(i).getCoordenadaUsuario()!=null){
+                mMap.addMarker(new MarkerOptions()
+                        .position(lista.get(i).getCoordenadaUsuario()));
+            }else{
+                CircleOptions circleOptions = new CircleOptions()
+                        .center(lista.get(i).getCoordenadaCaja())
+                        .radius(150); // In meters
 
-            Circle circle = mMap.addCircle(circleOptions);
+                Circle circle = mMap.addCircle(circleOptions);
 
-            lat+=lista.get(i).getCoordenadaCaja().latitude;
-            lng+=lista.get(i).getCoordenadaCaja().longitude;
+                lat+=lista.get(i).getCoordenadaCaja().latitude;
+                lng+=lista.get(i).getCoordenadaCaja().longitude;
+            }
 
         }
         lat/=lista.size();
         lng/=lista.size();
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat,lng)));
+        if(point!=null){
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(point));
+            mMap.addMarker(new MarkerOptions()
+                    .position(point).title(desc));
+            mMap.setMinZoomPreference(6);
 
-        mMap.setMinZoomPreference(5);
+        }else{
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat,lng)));
+        }
 
 
 

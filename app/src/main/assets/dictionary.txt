@@ -1,0 +1,28 @@
+CNJ Conjunto
+CONJ Conjunto
+CONJUNTO Conjunto
+AP Apartamento
+APT Apartamento
+APTO Apartamento
+APARTAMENTO Apartamento
+TORR Torre
+TRR Torre
+TO Torre
+TORRE Torre
+BL Bloque
+BLO Bloque
+BLQ Bloque
+BLOQUE Bloque
+CS Casa
+CAS Casa
+CASA Casa
+CC Centro Comercial
+CENTRO COMERCIAL Centro Comercial
+HDA Hacienda
+HACIENDA Hacienda
+LT Lote
+LOTE Lote
+ED Edificio
+EDIFICIO Edificio
+OF Oficina
+OFICINA	Oficina
